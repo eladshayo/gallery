@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>photography</title>
+    <link href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="styles.css">
+
+  </head>
+  <body>
+    <div class="main-area">
+      <div class="menu">
+        <input class="menu-input" type="text">
+        <button class="menu-b"><div></div></button>
+      </div>
+      <div class="images-area">
+        
+      </div>
+    </div>
+    <script>
+      const mainArea = document.querySelector('.main-area');
+      const imagesArea = document.querySelector('.images-area');
+      let main_menu_dir = true;
+      let imagesArea_anim_progress = 0;
+      const imagesArea_anim_doration = 10000
+      
+      imagesArea.style.left = '0px';
+      menuScroll();
+
+      function menuScroll() {
+        if (main_menu_dir) {
+          main_menu_dir = false;
+          imagesArea.style.left = `${-((imagesArea.offsetWidth / 2))}px`;
+        }else{
+          main_menu_dir = true;
+          imagesArea.style.left = '0px';
+        }
+      }
+
+
+      setInterval(menuScroll,imagesArea_anim_doration);
+
+      setInterval(()=>{
+        if(imagesArea_anim_progress>=imagesArea_anim_doration-1000){
+          imagesArea_anim_progress = 0;
+        }else{
+          imagesArea_anim_progress+=imagesArea_anim_doration/100;
+        }
+      },imagesArea_anim_doration/100);
+      
+
+      const pictures = [
+        'img1.jpg', 'img2.jpg', 'img3.jpg', 'img4.jpg', 'img5.jpg', 'img6.jpg','img7.jpg', 'img8.jpg', 'img9.jpg', 'img10.jpg', 'img11.jpg', 'img12.jpg', 'img13.jpg', 'img14.jpg'
+      ];
+      let pictures_places = [
+        0,1,2,3,4,5,0,1,2,3,4,5
+      ]
+
+      function update_pictures() {
+        const wrapper = document.getElementsByClassName('images-area')[0];
+        wrapper.innerHTML = `
+          <div class="item0" data-id="0" onclick="switch_picture(dataset.id)"><img src="${pictures[pictures_places[0]]}"></div>
+          <div class="item1" data-id="1" onclick="switch_picture(dataset.id)"><img src="${pictures[pictures_places[1]]}"></div>
+          <div class="item2" data-id="2" onclick="switch_picture(dataset.id)"><img src="${pictures[pictures_places[2]]}"></div>
+          <div class="item3" data-id="3" onclick="switch_picture(dataset.id)"><img src="${pictures[pictures_places[3]]}"></div>
+          <div class="item4" data-id="4" onclick="switch_picture(dataset.id)"><img src="${pictures[pictures_places[4]]}"></div>
+          <div class="item5" data-id="5" onclick="switch_picture(dataset.id)"><img src="${pictures[pictures_places[5]]}"></div>
+          <div class="item6" data-id="6" onclick="switch_picture(dataset.id)"><img src="${pictures[pictures_places[6]]}"></div>
+          <div class="item7" data-id="7" onclick="switch_picture(dataset.id)"><img src="${pictures[pictures_places[7]]}"></div>
+          <div class="item8" data-id="8" onclick="switch_picture(dataset.id)"><img src="${pictures[pictures_places[8]]}"></div>
+          <div class="item9" data-id="9" onclick="switch_picture(dataset.id)"><img src="${pictures[pictures_places[9]]}"></div>
+          <div class="item10" data-id="10" onclick="switch_picture(dataset.id)"><img src="${pictures[pictures_places[10]]}"></div>
+          <div class="item11" data-id="11" onclick="switch_picture(dataset.id)"><img src="${pictures[pictures_places[11]]}"></div>
+        `;
+      }
+      
+      let last_random = Math.floor(Math.random() * 14);
+      function switch_picture(id){
+        let randomNumber = Math.floor(Math.random() * 14);
+        while (last_random === randomNumber) {
+            randomNumber = Math.floor(Math.random() * 14);
+        }
+        last_random = randomNumber;
+        pictures_places[id] = randomNumber;
+        update_picture(id);
+      }
+
+      function update_picture(id){
+        const douration = 300;
+        const imgElement = document.querySelector(`.item${id} img`);
+        imgElement.style.opacity = 0;
+        setTimeout(() => {
+          const current_div = document.querySelector(`.item${id}`);
+          current_div.innerHTML = `<img src="${pictures[pictures_places[Number(id)]]}" >`;
+          const imgElement = document.querySelector(`.item${id} img`);
+          imgElement.style.opacity = 0;
+        },douration/2)
+        setTimeout(() => {
+          const imgElement = document.querySelector(`.item${id} img`);
+          imgElement.style.opacity = 1;
+        },douration)
+      }
+
+      function update_position(){
+        for (let index = 0; index < 12; index++) {
+          let element = document.querySelector(`.item${index} img`);
+          element.style.transform = `translateX(${(50-(imagesArea_anim_progress/100))/1.8}px) scale(1.35)`;
+        }        
+      }
+      
+      update_pictures();
+      setInterval(update_position,20);
+
+      let last_random_picture = Math.floor(Math.random() * 13);
+      
+      setInterval(() => {
+        let randomNumber = Math.floor(Math.random() * 13);
+        while (last_random_picture === randomNumber) {
+            randomNumber = Math.floor(Math.random() * 13);
+        }
+        last_random_picture = randomNumber;
+        switch_picture(randomNumber);
+      }, 600);
+
+
+
+
+    </script>
+  </body>
+  <footer>
+
+  </footer>
+</html>
