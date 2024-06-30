@@ -61,8 +61,9 @@
       window.addEventListener('touchmove', function(event) {
         const touchMoveY = event.touches[0].clientY;
         const deltaY = touchStartY - touchMoveY;
-        touchStartY = touchMoveY;
-        scroll_val += deltaY * scrollSpeed;
+        touchStartY = touchMoveY/2;
+        scroll_val += deltaY;
+        update_scroll_ui();
       });
 
       function ev_wheel(event) {
