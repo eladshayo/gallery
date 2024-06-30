@@ -5,18 +5,15 @@
 body{
   background-color: rgb(249, 249, 249);
   margin: 0;
-  height: 200vh;
+  height: 100vh;
   overflow: hidden;
 }
-input,div{
+*{
   font-family:'Courier New', Courier, monospace
 
 }
 .main-area{
   width: 100vw;
-  @media (max-width:700px){
-    width: 175vw;
-  }
   height: 100vh;
   box-sizing: border-box;
   margin: 0;
@@ -29,7 +26,10 @@ input,div{
     position: absolute;
     bottom: -8px;
     left: 50%;
-    width: 100%;
+    width: 100vw;
+    @media (max-width:700px){
+      width: 175vw;
+    }
     height: 60px;
     z-index: 4;
     border-radius: 60px;
