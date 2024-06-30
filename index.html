@@ -38,47 +38,48 @@
       const imagesArea_div = document.querySelector('.images-area');
       const startCaptions_div = document.querySelector('.start_captions');
       let scroll_val = 0;
+      let touch_scroll_last = 0;
       
       update_scroll_ui();
+
       window.addEventListener('wheel',ev_wheel);
-      window.addEventListener('keydown',
+      window.addEventListener('keydown',ev_arrows);
+      window.addEventListener('touchstart',ev_touch_start,false)
+      window.addEventListener('touchmove',ev_touch_move,false);
+      
+      
+      function ev_wheel(event) {
+        scroll_val += (event.deltaY*window.innerHeight/1000000);
+        update_scroll_ui();
+      }
       function ev_arrows(event) {
         if (event.key === 'ArrowDown') {
-          scroll_val += (window.screen.height/10000);
-          scroll_val = Math.max(scroll_val,0);
+          scroll_val += (window.innerHeight/10000);
           update_scroll_ui();
         } else if (event.key === 'ArrowUp') {
-          scroll_val -= (window.screen.height/10000);
-          scroll_val = Math.max(scroll_val,0);
+          scroll_val -= (window.innerHeight/10000);
           update_scroll_ui();
         }
       }
-      );
-
-      window.addEventListener('touchstart', function(event) {
-        touchStartY = event.touches[0].clientY;
-      });
-      window.addEventListener('touchmove', function(event) {
-        const touchMoveY = event.touches[0].clientY;
-        const deltaY = touchStartY - touchMoveY;
-        touchStartY = touchMoveY/2;
-        scroll_val += deltaY;
+      function ev_touch_start(event){
+        event.preventDefault();
+        touch_scroll_last = event.targetTouches[0].pageY;
         update_scroll_ui();
-      });
-
-      function ev_wheel(event) {
-        scroll_val += (event.deltaY*window.screen.height/1000000);
-        scroll_val = Math.max(scroll_val,0);
-        console.log(scroll_val);
+      }
+      function ev_touch_move(event){
+        event.preventDefault();
+        scroll_val += ((touch_scroll_last-event.targetTouches[0].pageY)/1.5)/window.innerHeight;
         update_scroll_ui();
       }
 
       
 
       function update_scroll_ui(){
+        scroll_val = Math.max(scroll_val,0);
+        scroll_val = Math.min(scroll_val,3);
         if(scroll_val<2){
           body.style.overflow = 'hidden';
-          mainMenu_div.style.top = `${Math.max(25,(1-scroll_val)*634)}px`;
+          mainMenu_div.style.top = `${Math.max(25,(1-scroll_val)*(window.innerHeight-90))}px`;
           mainMenu_div.style.transform = `scale(${Math.min(1.1,((1+scroll_val/7)))}) translateX(-50%)`;
           mainMenu_div.style.transformOrigin = 'left center';
           imagesArea_div.style.opacity = 1.1-scroll_val;
